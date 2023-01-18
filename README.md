@@ -1,28 +1,23 @@
-# FOREX-strategies-for-algorithmic-trading-2022
-🇬🇧https://www.udemy.com/course/forex-strategies-for-algorithmic-trading-2022/?referralCode=4EE07E2077B53F51AF57
+# Estrategias Avanzadas de Trading Algorítmico aplicadas al mundo Forex 2023
+
+🇪🇸 Puedes apuntarte en nuestro curso en: https://cursos.frogamesformacion.com/courses/trading-algoritmico-9
+
+O obtener la Ruta completa de trading algorítmico en: https://cursos.frogamesformacion.com/bundles/ruta-trading 
+
+### Recursos
+
+💰 Únete a la comunidad de Discord: https://discord.gg/wXjNPAc5BH
+
+📚 Puedes leer nuestro libro en: https://www.amazon.com/gp/product/B09HG18CYL 
+
+🖥️ El canal de YouTube de Quantreo's (en inglés): https://www.youtube.com/channel/UCp7jckfiEglNf_Gj62VR0pw
 
 
-<br> 
 
-🇫🇷 https://www.udemy.com/course/strategies-forex-pour-le-trading-algorithmique-2022/?referralCode=10190D657B4885AB816F
+### VPS / Instalar Windows en tu Mac
 
-<br>
-<br>
-
-### Ressources
-
-💰 Join our community: https://discord.gg/wXjNPAc5BH
-
-📚Read our book: https://www.amazon.com/gp/product/B09HG18CYL 
-
-🖥️Quantreo's YouTube channel: https://www.youtube.com/channel/UCp7jckfiEglNf_Gj62VR0pw
-
-<br>
-
-### VPS / Install Windows in your mac
-
-VPS: https://billing.virmach.com/aff.php?aff=10381
+VPS: https://billing.virmach.com/aff.php?aff=10561
 
 BOOT CAMP MAC: https://www.youtube.com/watch?v=Hmm9Q-T0oTo
 
-Parrallels Desktop: https://www.parallels.com/fr/
+Parallels Desktop: https://www.parallels.com/
