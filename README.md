@@ -6,11 +6,12 @@ O obtener la Ruta completa de trading algorítmico en: https://cursos.frogamesfo
 
 ### Recursos
 
-💰 Únete a la comunidad de Discord: https://discord.gg/wXjNPAc5BH
+💰 Únete a la comunidad de [Discord](https://discord.gg/z3dx5XpkX4)
 
-📚 Puedes leer nuestro libro en: https://www.amazon.com/gp/product/B09HG18CYL 
+📚 Puedes leer nuestro libro en [Amazon](https://www.amazon.es/Python-para-finanzas-trading-algor%C3%ADtmico-ebook/dp/B0BT4ZS9Q3)
 
-🖥️ El canal de YouTube de Quantreo's (en inglés): https://www.youtube.com/channel/UCp7jckfiEglNf_Gj62VR0pw
+🖥️ El canal de [YouTube de Quantreo's](https://www.youtube.com/channel/UCp7jckfiEglNf_Gj62VR0pw) (en inglés) y el de [Frogames](https://www.youtube.com/channel/UCMUxXNYrVCv6-bQakhomvBg) en Español
+
 
 
 
