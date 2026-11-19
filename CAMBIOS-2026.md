@@ -81,7 +81,8 @@ Algunas celdas dan un error a propósito para explicar algo (por ejemplo, qué e
 Aquí no ha cambiado ninguna librería: son fallos del código del curso que enseñaban algo mal. **Lo que
 verás en pantalla será distinto del vídeo**, y está explicado en cada punto. Comprobado: los capítulos 4 y 5 y el BONUS de SVR se han
 vuelto a ejecutar enteros con `requirements.txt` y la réplica de Yahoo de arriba (todos sin error). Las
-cifras de antes y después salen de Yahoo Finance real, descargado el 19 de noviembre de 2026, y de los CSV del repositorio. El capítulo 7 (MetaTrader 5) **no se ha ejecutado** (solo Windows).
+cifras de antes y después salen de Yahoo Finance real, descargado el 19 de noviembre de 2026, y de los CSV del repositorio. El capítulo 7 (MetaTrader 5) **no se ha ejecutado** (solo Windows): se ha
+comprobado que todas sus celdas compilan y, con un MetaTrader 5 simulado, lo que dicen los puntos 2 y 3.
 Los notebooks conservan la salida guardada del vídeo: en las celdas de estos puntos, lo guardado es el
 resultado antiguo (por ejemplo, `Alpha: 0.9 %`); al ejecutarlas, sale el nuevo.
 
@@ -122,8 +123,64 @@ Alfa no mide seguridad: es la rentabilidad que se obtiene por encima de la que t
 mercado asumido (beta). Con beta cercana a 0 apenas cambia; con beta cercana a 1, el cálculo antiguo daba
 casi 0 fuera cual fuera el alfa real.
 
-### 2. Capítulo 7 (MetaTrader 5): avisos (sin ejecutar)
+### 2. La clase `MT5` del capítulo 7 no se podía ejecutar (celda 0)
+
+**En el vídeo:** se ejecuta la celda con la clase `MT5` (`get_data`, `orders`, `resume`, `run` y
+`close_all_night`) y se colocan órdenes con ella.
+
+**Qué estaba mal:** en el notebook, `orders` y `resume` tenían la sangría mezclada (7 y 8 espacios en una,
+10 y 8 en la otra). La celda daba `IndentationError` en la línea 42 antes de definir nada, y así está desde
+que se subió el notebook (enero de 2023). Debajo había un segundo fallo: en `resume`, el `pd.concat` estaba
+fuera del `for`. Con dos posiciones abiertas devolvía una sola fila, y sin ninguna daba `UnboundLocalError`.
+Como `run` llama a `resume` cada vez, el robot no habría podido abrir la primera posición (comprobado con un
+MetaTrader 5 simulado).
+
+**Ahora:** 18 líneas re-sangradas, y el `pd.concat` pasa a estar dentro del `for`, como explica el vídeo («las
+iremos concatenando»). La clase queda idéntica (el mismo árbol sintáctico) a la del curso de trading con
+Machine Learning. Con el MetaTrader 5 simulado, `resume` devuelve 2 filas con 2 posiciones y 0 filas sin
+ninguna. Ejecutarlo de verdad sigue necesitando Windows con MetaTrader 5.
+
+### 3. El SVR en vivo usaba precios del mismo día (capítulo 7, celda 1)
+
+**En el vídeo** («Estrategia de Trading en Vivo: SVR»): la función `svm_reg_trading` es «el mismo código
+que habéis visto» en el capítulo 5.
+
+**Qué estaba mal:** el capítulo 5 elige las variables con `6:dfc.shape[1]-6`, y el capítulo 7 lo hacía con
+`6:dfc.shape[1]-1`. Esas cinco columnas de más son el `open`, `high`, `low`, `close` y `volume` del mismo
+día sin desplazar, es decir, el precio con el que se calcula el retorno que el modelo tiene que predecir.
+Comprobado con un MetaTrader 5 simulado sobre `EURUSD_D1.csv`: 90 variables, y las cinco últimas eran esas.
+
+**Ahora:** `6:dfc.shape[1]-6` en el entrenamiento y en el test, como en el capítulo 5 (85 variables, ningún
+precio sin desplazar).
+
+### 4. Faltaba `import time` (capítulo 7, celda 1)
+
+El bucle en vivo termina cada ronda con `time.sleep(1)`, pero ninguna celda importaba `time`. El robot daba
+`NameError` justo después de enviar la primera ronda de órdenes. Ahora la celda 1 lo importa.
+
+### 5. Capítulo 7 (MetaTrader 5): avisos (sin ejecutar)
 
 - **Avisos, sin cambiar el código:** hay un comentario en `filling_mode - 1` (en la celda 0 del notebook). `filling_mode` es una máscara de bits del broker: restarle 1 solo acierta si el
   símbolo admite un único modo de ejecución, y si no, la orden puede rechazarse. Opera
   siempre en una **cuenta demo**, y empieza con `live = False`.
+- **El SVR en vivo usa `SVR()`, no el del capítulo 5.** El capítulo 5 usa `SVR(kernel="rbf",
+  epsilon=0.005)`. Con el `epsilon=0.1` por defecto, todos los retornos diarios del forex caben en el margen
+  de ±10 % que el modelo no penaliza, y apenas aprende. Con el MetaTrader 5 simulado sobre los últimos 60 días
+  de `EURUSD_D1.csv`, compra el 100 % de los días. Si quieres el modelo del capítulo 5, pon allí el mismo
+  `epsilon`. No se ha cambiado porque decide qué hace el robot y no se ha podido probar contra un broker.
+
+## Erratas del vídeo (el código no cambia)
+
+- **Anualizar con 52** («Probando el backtesting de nuestra estrategia en Forex + Apalancamiento», capítulo 4,
+  celda 25). El vídeo usa `BackTest(..., 52)` porque cada posición dura cinco días y salen «52 posiciones» al
+  año. Pero la serie sigue teniendo una fila por día (EURUSD: unas 260 al año) y `BackTest` anualiza la
+  media por fila, así que con 52 sale unas cinco veces menos de lo que toca: en el test de EURUSD, la media
+  por fila × 252 da 0,0061, × 52 da 0,0013, y la suma real por año es 0,0063. Las cifras de alfa de esta
+  página siguen calculadas con 52, como en el vídeo.
+- **Pesos, umbrales y apalancamiento elegidos sobre el test** (capítulo 6). `ML.csv` y `TA.csv` guardan los
+  retornos del periodo de test (`train=False`), y sobre esos mismos datos se optimizan los pesos del Sortino,
+  se eligen los umbrales del drawdown (1,5 %, 1 %, 6 %) y el apalancamiento (×10 a ×80), y se juzga el
+  resultado. El propio vídeo lo advierte: el umbral «lo tenéis que colocar antes de crear la estrategia». Así
+  medido, el resultado es optimista: para juzgarlo, elige todo eso con el entrenamiento y evalúa en el test.
+- **«Un 6 % en cada uno de 10 activos es una pérdida máxima del 60 %»** (capítulo 6). Con pesos que suman el
+  100 %, perder un 6 % en cada activo es perder en torno a un 6 % de la cartera, no un 60 %.
